@@ -17,9 +17,20 @@ mongoose
   });
 
 const app = express();
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internl Server Error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 
