@@ -5,12 +5,12 @@ import { errorHandler } from "../utils/error.js";
 export const signup = async (req, res, next) => {
   try {
     // Server-side validation
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
     if (
-      !name ||
+      !username ||
       !email ||
       !password ||
-      name === "" ||
+      username === "" ||
       email === "" ||
       password === ""
     ) {
@@ -18,10 +18,16 @@ export const signup = async (req, res, next) => {
       next(errorHandler(400, "All fields are required"));
     }
 
-    // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+    // Check if the username already exists
+    const existingUserByUsername = await User.findOne({ username });
+    if (existingUserByUsername) {
+      return next(errorHandler(400, "Username already exists"));
+    }
+
+    // Check if the email already exists
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
+      return next(errorHandler(400, "Email already exists"));
     }
 
     // Hash the password
@@ -29,7 +35,7 @@ export const signup = async (req, res, next) => {
 
     // Create and save the new user
     const newUser = new User({
-      name,
+      username,
       email,
       password: hashedPassword,
     });
