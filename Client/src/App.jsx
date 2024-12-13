@@ -7,6 +7,7 @@ import Projects from "./pages/Projects"
 import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
 import Header from './components/Header'
+import Footerend from './components/Footerend'
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/signup' element={<Signup />} />
         <Route path='*' element={"ERROR"} />
       </Routes>
+      <Footerend />
 
     </BrowserRouter>
   )
